@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -84,8 +86,6 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             name = nameController.text.toString();
             age = ageController.text.toString();
-
-            databaseMethod(name, age);
           });
         },
         child: const Icon(CupertinoIcons.add),
@@ -94,11 +94,27 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-databaseMethod(var name, var age) async {
-  var customers = await Hive.openBox('customers');
-
-  customers.put('name', name);
-  customers.put('age', age);
-
-  return customers;
+Future<void> _showDialogBox(BuildContext context) async {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('ADD NOTES!'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Add'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Edit'),
+          ),
+        ],
+      );
+    },
+  );
 }
